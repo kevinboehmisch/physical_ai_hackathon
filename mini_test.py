@@ -1,16 +1,12 @@
 import time
 from reachy_mini import ReachyMini
 
-# Connect to your local robot
-robot = ReachyMini('localhost')
+robot = ReachyMini()
 
-# Wake up the robot
-robot.turn_on()
+robot.wake_up()
 
-# Move the antennas to a happy position
-robot.head.left_antenna.goal_position = 45
-robot.head.right_antenna.goal_position = -45
+import numpy as np
+robot.goto_target(antennas=np.deg2rad([45, -45]), duration=1.0)
 time.sleep(1)
 
-# Put the robot back to sleep safely
-robot.turn_off()
+robot.goto_sleep()
