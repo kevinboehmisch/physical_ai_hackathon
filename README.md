@@ -1,5 +1,18 @@
 # physical_ai_hackathon
 
+# Links
+position: https://www.google.com/about/careers/applications/jobs/results/94172495052972742-software-engineering-intern-ms-summer-2027?ca 
+  tegory=DATA_CENTER_OPERATIONS&category=DEVELOPER_RELATIONS&category=HARDWARE_ENGINEERING&category=INFORMATION_TECHNOLOGY&category=MANUFACTURING_SUPPLY_CHAIN&category=NETWORK_ENGINEERING&cat 
+  egory=PRODUCT_MANAGEMENT&category=PROGRAM_MANAGEMENT&category=SOFTWARE_ENGINEERING&category=TECHNICAL_INFRASTRUCTURE_ENGINEERING&category=TECHNICAL_SOLUTIONS&category=TECHNICAL_WRITING&cate 
+  gory=USER_EXPERIENCE&jex=ENTRY_LEVEL&target_level=INTERN_AND_APPRENTICE&page=2 
+
+  Google interview Structure:
+  -  https://igotanoffer.com/blogs/tech/google-behavioral-interview
+  -  https://www.tryexponent.com/guides/google-software-engineer-intern-interview
+
+=> one behavioral interview and one technical (leetcode with blanc document)
+
+------
 
 ## Setup & Installation (Windows)
 
