@@ -9,14 +9,15 @@ Navigiere in deinen Projektordner und führe die folgenden Befehle in der PowerS
 ```powershell
 python -m venv venv
 .\venv\Scripts\activate
-
 ```
+
+> Falls PowerShell das Aktivieren blockiert (`running scripts is disabled`), einmalig ausführen:
+> `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`
 
 ### 2. Reachy Mini inklusive Simulation installieren
 
 ```powershell
 python -m pip install "reachy-mini[mujoco]"
-
 ```
 
 ## Simulation starten & testen
@@ -32,11 +33,45 @@ Starte den Hintergrunddienst, der den 3D-Roboter lädt. Das Fenster muss währen
 reachy-mini-daemon --sim
 ```
 
-### Terminal 2: Eigenen Python-Code ausführen
+Der Daemon läuft dann auf `localhost:8000`. Zeilen wie `GET /api/daemon/status ... 200` im Log sind normal.
 
-Öffne ein neues Terminal im selben Projektordner, um deine Skripte gegen die laufende Simulation auszuführen:
+> **Wichtig:** Immer nur **einen** Daemon gleichzeitig laufen lassen – entweder `reachy-mini-daemon --sim` **oder** die Reachy Mini Desktop-App, nicht beides (beide nutzen Port 8000).
+
+### Terminal 2: Test-Skript ausführen
+
+Öffne ein neues Terminal im selben Projektordner und führe das Test-Skript gegen die laufende Simulation aus:
 
 ```powershell
 .\venv\Scripts\activate
-python test_sim.py
+python mini_test.py
 ```
+
+Das Skript weckt den Roboter auf, bewegt die Antennen und legt ihn wieder schlafen. Die Bewegung siehst du im 3D-Fenster der Simulation. Erwartete Ausgabe:
+
+```
+Connected, waking up...
+Moving antennas...
+Antenna positions: [0.80..., -0.80...]
+Going to sleep...
+Done!
+```
+
+Meldungen wie `Audio system is not initialized.` sind in der Simulation harmlos (es gibt keine Kamera/Audio-Hardware).
+
+## Eigenen Code schreiben
+
+Verbindung zur lokalen Simulation aufbauen:
+
+```python
+from reachy_mini import ReachyMini
+
+with ReachyMini(host='localhost', connection_mode='localhost_only', media_backend='no_media') as robot:
+    robot.wake_up()
+    robot.goto_target(antennas=[0.8, -0.8], duration=1.0)  # Werte in Radiant
+    robot.goto_sleep()
+```
+
+Hinweise:
+- `ReachyMini('localhost')` funktioniert **nicht** – der erste Parameter ist der Robotername, nicht der Host. Immer `host='localhost'` angeben.
+- Winkel werden in **Radiant** angegeben (0.8 rad ≈ 45°).
+- Für den echten Roboter später keinen Sim-Daemon starten und `ReachyMini()` ohne `host`/`connection_mode` verwenden – dann wird der Roboter unter `reachy-mini.local` im Netzwerk gesucht (und `media_backend='no_media'` weglassen, wenn Kamera/Audio gebraucht werden).

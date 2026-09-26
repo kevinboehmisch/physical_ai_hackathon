@@ -1,16 +1,20 @@
 import time
 from reachy_mini import ReachyMini
 
-# Connect to your local robot
-robot = ReachyMini('localhost')
+# Connect to the locally running daemon (e.g. the simulation on localhost:8000)
+# media_backend='no_media' skips camera/audio setup (not needed here, avoids warnings)
+with ReachyMini(host='localhost', connection_mode='localhost_only', media_backend='no_media') as robot:
+    print("Connected, waking up...")
+    robot.wake_up()
 
-# Wake up the robot
-robot.turn_on()
+    # Move the antennas to a happy position (values in radians)
+    print("Moving antennas...")
+    robot.goto_target(antennas=[0.8, -0.8], duration=1.0)
+    time.sleep(1)
+    print("Antenna positions:", robot.get_present_antenna_joint_positions())
 
-# Move the antennas to a happy position
-robot.head.left_antenna.goal_position = 45
-robot.head.right_antenna.goal_position = -45
-time.sleep(1)
+    # Put the robot back to sleep safely
+    print("Going to sleep...")
+    robot.goto_sleep()
 
-# Put the robot back to sleep safely
-robot.turn_off()
+print("Done!")
